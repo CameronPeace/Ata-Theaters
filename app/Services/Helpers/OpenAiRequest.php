@@ -7,7 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Collection;
 
-class OpenAiApi
+class OpenAiRequest
 {
 
     /**
@@ -39,7 +39,7 @@ class OpenAiApi
 
     
 
-	public function call(string $method, string $path, array $params = array()): string|Collection
+	public function call(string $method, string $path, array $params = array()): ?array
 	{
 
 		try {

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('theater', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('location_name');
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('street')->nullable();
-            $table->string('zip5')->nullable();
-            $table->date('created')->useCurrent();
+            $table->string('location_name', length: 105);
+            $table->string('city', length: 170)->nullable();
+            $table->string('state', length: 70)->nullable();
+            $table->string('street', length: 100)->nullable();
+            $table->string('zip5', length: 10)->nullable();
+            $table->dateTime('created')->useCurrent();
         });
     }
 

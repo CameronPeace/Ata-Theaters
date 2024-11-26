@@ -16,7 +16,7 @@ return new class extends Migration
             $table->double('amount', total: 4, places: 2);
             $table->foreignId('screening_id');
             $table->foreign('screening_id')->references('id')->on('screening');
-            $table->date('created')->useCurrent();
+            $table->dateTime('created')->useCurrent();
         });
     }
 

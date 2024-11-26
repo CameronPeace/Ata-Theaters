@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Screening
+use Illuminate\Database\Eloquent\Model;
+
+class Screening extends Model
 {
 
     /**
