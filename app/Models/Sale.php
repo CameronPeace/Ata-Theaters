@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Sale
+use Illuminate\Database\Eloquent\Model;
+
+class Sale extends Model
 {
 
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-class Theater
+use Illuminate\Database\Eloquent\Model;
+
+class Theater extends Model
 {
+    protected $table = 'theater';
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +20,7 @@ class Theater
         'street',
         'zip5'
     ];
-   
+
     /**
      * The attributes that should be cast.
      *
