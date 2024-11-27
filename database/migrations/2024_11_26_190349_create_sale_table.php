@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('sale', function (Blueprint $table) {
             $table->id();
             $table->double('amount', total: 4, places: 2);
+            $table->dateTime('sale_date')->useCurrent();
             $table->foreignId('screening_id');
             $table->foreign('screening_id')->references('id')->on('screening');
-            $table->dateTime('created')->useCurrent();
+            $table->timestamps();
         });
     }
 

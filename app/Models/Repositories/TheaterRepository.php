@@ -9,20 +9,21 @@ class TheaterRepository
 {
     protected $table;
 
-	public function __construct()
-	{
-		$this->table = new Theater;
-	}
+    public function __construct()
+    {
+        $this->table = new Theater;
+    }
 
-    public function createTheaters(int $total) 
+    public function createTheaters(int $total)
     {
         $openAi = new OpenAiService();
         $records = $openAi->requestTheaterData($total);
-        $recordsArray = json_decode($records,true);
+        $recordsArray = json_decode($records, true);
+        $now = now()->toDateTimeString();
 
-        foreach($recordsArray As $record) {
+        foreach ($recordsArray as $record) {
+            $record['created_at'] = $now;
             $this->table->insert($record);
         }
     }
-
 }

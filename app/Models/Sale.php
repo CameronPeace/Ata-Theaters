@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sale extends Model
 {
+    use hasFactory;
 
+    protected $table = 'sale';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'is_showing',
-        'screen_end'
+        'amount',
     ];
    
     /**
@@ -23,6 +25,8 @@ class Sale extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'created' => 'datetime'
+        'sale_date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 }
