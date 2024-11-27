@@ -14,7 +14,8 @@ return new class extends Migration
         DB::statement(' 
             CREATE PROCEDURE theater_revenue(
             date_to DATETIME, 
-            date_from DATETIME
+            date_from DATETIME,
+            query_limit int
             ) 
             BEGIN
             SELECT
@@ -33,7 +34,8 @@ return new class extends Migration
 	        WHERE 
 		        `sale`.`sale_date` BETWEEN date_to AND date_from
 	        GROUP BY `t`.`id`, DATE(sale.`sale_date`) 
-	        ORDER BY `total_theater_sales` DESC;
+	        ORDER BY `total_theater_sales` DESC
+            LIMIT query_limit;
             END;
         ');
     }
