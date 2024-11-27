@@ -27,6 +27,7 @@ class Theater extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'created' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 }

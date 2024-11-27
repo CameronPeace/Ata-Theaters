@@ -19,8 +19,7 @@ return new class extends Migration
             $table->foreign('theater_id')->references('id')->on('theater');
             $table->tinyInteger('is_showing')->default(1);
             $table->dateTime('screen_end')->nullable();
-            $table->dateTime('created')->useCurrent();
-            $table->dateTime('updated')->nullable()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

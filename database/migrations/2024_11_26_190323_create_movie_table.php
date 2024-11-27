@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('director', length: 100)->nullable();
             $table->string('poster_url', length: 255)->nullable();
             $table->date('release_date')->nullable();
-            $table->dateTime('created')->useCurrent();
-            $table->dateTime('updated')->nullable()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

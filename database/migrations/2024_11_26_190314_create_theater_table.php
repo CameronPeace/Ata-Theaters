@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('state', length: 70)->nullable();
             $table->string('street', length: 100)->nullable();
             $table->string('zip5', length: 10)->nullable();
-            $table->dateTime('created')->useCurrent();
+            $table->timestamps();
         });
     }
 

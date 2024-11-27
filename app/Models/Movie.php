@@ -29,7 +29,7 @@ class Movie extends Model
      */
     protected $casts = [
         'release_date' => 'date',
-        'created' => 'datetime',
-        'updated' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
 }
