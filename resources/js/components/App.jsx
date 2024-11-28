@@ -10,17 +10,25 @@ import api from "../utils/api";
 
 export const App = () => {
     const isFirstRender = useRef(true);
-    const [startDate, setStartDate] = useState(Moment().format('YYYY-MM-DD 00:00:00'));
-    const [endDate, setEndDate] = useState(Moment().format('YYYY-MM-DD 23:59:59'));
+    const [startDate, setStartDate] = useState(Moment().utc().format('YYYY-MM-DD 00:00:00'));
+    const [endDate, setEndDate] = useState(Moment().utc().format('YYYY-MM-DD 23:59:59'));
     const [inputError, setInputError] = useState(null);
     const [queryLimit, setQueryLimit] = useState(20);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [warning, setWarning] = useState(null);
+    const [topTheaterData, setTopTheaterData] = useState([]);
+    const [showData, setShowData] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
+    const [showError, setShowError] = useState(false);
 
     useEffect(() => {
         if (!isFirstRender.current) {
-            console.log(startDate);
-            console.log(endDate);
-            console.log(queryLimit);
+            if (topTheaterData.length > 0) {
+                // Date range was changed, hide table.
+                setShowData(false);
+            }
+
             if (Moment(endDate).isBefore(Moment(startDate))) {
                 setInputError('End date cannot be earlier than the start date!');
             } else {
@@ -30,11 +38,22 @@ export const App = () => {
     }, [startDate, endDate]);
 
     useEffect(() => {
+        if (!isFirstRender.current) {
+
+            if (topTheaterData.length > 0) {
+                setShowData(true);
+            }
+        }
+    }, [topTheaterData]);
+
+
+    useEffect(() => {
         isFirstRender.current = false;
     }, []);
 
     const handleLimitChange = (value) => {
-        if (isNaN(parseInt(value)) && value !== '') {
+        console.log(value);
+        if (isNaN(parseInt(value))) {
             setInputError("Please use a numeric value as a limit.");
         } else {
             setQueryLimit(value);
@@ -43,21 +62,31 @@ export const App = () => {
     };
 
     const getTopTheaters = async () => {
-        console.log('we hit the button');
-
         setLoading(true);
-
+        setShowError(false);
+        setShowWarning(false);
         await api.getTopTheaters({ fromDate: startDate, toDate: endDate, queryLimit: queryLimit }).then(response => {
 
-            let data = response;
+            let data = response.data.body.data;
+            let status = response.data.body.status;
 
-            if (data.error) {
-                setError(data.error);
+            if (data === undefined || data.length == 0) {
+                setWarning('Empty Dataset.');
+                setShowWarning(true);
                 setLoading(false);
                 return;
             }
+
+            if (!status) {
+                setError(response.data.body.error);
+                setShowError(true);
+                setLoading(false);
+                return;
+            }
+
+            setTopTheaterData(data);
             setLoading(false);
-        }).catch((e) => {
+        }).catch(() => {
             setError('Unable to return theater data. Please try again later.');
             setLoading(false);
         })
@@ -65,14 +94,25 @@ export const App = () => {
 
     return (
         <div>
-            <h1>Top Theater Revenue</h1>
+            <h1 className="mb-2">Top Theater Revenue</h1>
             <div className="min-h-56 h-auto flex flex-col justify-center items-center">
+                {showWarning ?
+                    <div onClick={() => setShowWarning(false)} className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                        {warning}
+                    </div>
+                    : null}
+                {showError ?
+                    <div onClick={() => setShowError(false)} className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                        <span className="font-medium">Error! </span>{error}
+                    </div>
+                    : null}
                 {inputError ?
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <strong className="font-bold">Hold up!</strong>
                         <span className="block sm:inline"> <InputError className="text-md" message={inputError} />
                         </span>
                     </div>
+
                     : null}
 
                 <div className="flex flex-row justify-center items-center">
@@ -89,7 +129,7 @@ export const App = () => {
                     <InputLabel value={'Limit'} className="mr-3 text-xl" />
                     <TextInput type="number" min="1" value={queryLimit} placeholder={queryLimit} onChange={(event) => handleLimitChange(event.target.value)} />
                 </div>
-                <div className="mt-5">
+                <div className="mt-5 mb-5">
                     <PrimaryButton disabled={inputError} onClick={() => getTopTheaters()}>Search</PrimaryButton>
                 </div>
                 {loading ?
@@ -102,6 +142,45 @@ export const App = () => {
                             <span className="sr-only">Loading...</span>
                         </div>
                     </div> : null}
+
+                {showData ?
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <div className="text-center mb-2">
+                            <span>Showing Top Performing Theaters from {Moment(startDate).utc().format('MMMM Do YYYY')} to {Moment(endDate).utc().format('MMMM Do YYYY')}</span>
+                        </div>
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" className="px-6 py-3">
+                                        Theater name
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Theater Address
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Revenue From Range
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {topTheaterData.map((theater) => {
+                                    return (
+                                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={theater.theater_id}>
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {theater.theater_name}
+                                            </th>
+                                            <td className="px-6 py-4">
+                                                {theater.theater_street} {theater.theater_city} {theater.theater_state} {theater.theater_zip5}
+                                            </td>
+                                            <td className="px-6 py-4 text-center">${theater.total_theater_sales.toFixed(2)}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                    : null
+                }
             </div>
         </div>
     );

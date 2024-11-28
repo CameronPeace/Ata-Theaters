@@ -25,8 +25,7 @@ class ApiService
     public function getTopTheaters(string $fromDate, string $toDate, int $limit): array
     {
         $requestParams = ['fromDate' => $fromDate, 'toDate' => $toDate, 'limit' => $limit];
-        \Log::info('making sure we passed correctly');
-        \Log::info($requestParams);
+       
         return $this->apiRequest->requestTopTheaters($requestParams);
     }
 }

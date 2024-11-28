@@ -5,7 +5,6 @@ class api {
      * @returns {Promise<*>}
      */
     getTopTheaters = async (requestParams) => {
-        console.log('in api');
         return await fetch('theaters/top?' + new URLSearchParams(requestParams), {
             method: "GET",
             headers: {

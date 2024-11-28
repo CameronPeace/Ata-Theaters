@@ -68,7 +68,6 @@ class OpenAiService
         try {
             $choices = $response['body']['choices'] ?? [];
 
-            \Log::info($response);
             if (empty($choices)) {
                 \Log::error($response);
                 throw new \Exception('No ChatGPT results provided.');
