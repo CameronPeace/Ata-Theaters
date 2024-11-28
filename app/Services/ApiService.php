@@ -10,21 +10,23 @@ class ApiService
 
     public function __construct()
     {
-        $this->apiRequest = new ApiRequest();
+       $this->apiRequest = new ApiRequest();
     }
 
     /**
      * Get the top performing theaters from our Api.
      *
-     * @param string $toDate
      * @param string $fromDate
+     * @param string $toDate
      * @param int $limit
      *
      * @return array
      */
-    public function getTopTheaters(string $toDate, string $fromDate, int $limit): array
+    public function getTopTheaters(string $fromDate, string $toDate, int $limit): array
     {
-        $queryParams = ['toDate' => $toDate, 'fromDate' => $fromDate, 'limit' => $limit];
-        return $this->apiRequest->requestTopTheaters($queryParams);
+        $requestParams = ['fromDate' => $fromDate, 'toDate' => $toDate, 'limit' => $limit];
+        \Log::info('making sure we passed correctly');
+        \Log::info($requestParams);
+        return $this->apiRequest->requestTopTheaters($requestParams);
     }
 }

@@ -32,7 +32,7 @@ class OpenAiRequest
 	public function __construct()
 	{
 		$this->client = new Client();
-		$this->authorizationToken = config('open_ai_secret');
+		$this->authorizationToken = config('app.open_ai_secret');
 	}
 
 	/**
@@ -44,7 +44,7 @@ class OpenAiRequest
 	 *
 	 * @return array|null
 	 */
-	public function call(string $method, string $path, array $params = array()): ?array
+	public function call(string $method, string $path, array $params = array()): array
 	{
 		try {
 
@@ -61,9 +61,10 @@ class OpenAiRequest
 
 			return $response;
 		} catch (GuzzleException $e) {
+			\Log::error($e);
 		}
 
-		return collect(['status' => 'error']);
+		return ['status' => 'error'];
 	}
 
 	/**
@@ -77,7 +78,7 @@ class OpenAiRequest
 	{
 		$guzzleSettings = array(
 			'connect_timeout' => 60,
-			'timeout' => 60,
+			'timeout' => 120,
 			'headers' => array(
 				'Authorization' => 'Bearer ' . $this->authorizationToken,
 				'accept' => 'application/json',

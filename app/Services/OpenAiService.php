@@ -21,10 +21,10 @@ class OpenAiService
      *
      * @param int $total The total amount of json objects to ask ChatGPT for.
      *
-     * @return Json
+     * @return Json|null
      * @throws OpenAiServiceException
      */
-    public function requestMovieData(int $total): Json
+    public function requestMovieData(int $total)
     {
         try {
             $prompt = sprintf('Using actual existing movies aired in the US between G and R ratings, please create an array of json objects filling the values for these keys (title, genre, director, release_date). Please only return the json with no additional text. Please have at least %d objects in the array. Remove the json label as well.', $total);
@@ -41,10 +41,10 @@ class OpenAiService
      *
      * @param int $total The total amount of json objects to ask ChatGPT for.
      *
-     * @return Json
+     * @return Json|null
      * @throws OpenAiServiceException
      */
-    public function requestTheaterData(int $total): Json
+    public function requestTheaterData(int $total)
     {
         try {
             $prompt = sprintf('Using actual movie theaters in the United States, please populate an array of json objects filling the values with the address of each movie theater following these keys (location_name, city, state, street, zip5). Please only return the json with no additional text. Please have at least %d objects in the array. Remove the json label as well.', $total);
@@ -60,16 +60,18 @@ class OpenAiService
      *
      * @param array $response
      *
-     * @return Json
+     * @return Json|null
      * @throws OpenAiServiceException
      */
-    private function getResponseJsonData(array $response): Json
+    private function getResponseJsonData(array $response)
     {
         try {
             $choices = $response['body']['choices'] ?? [];
 
+            \Log::info($response);
             if (empty($choices)) {
-                return null;
+                \Log::error($response);
+                throw new \Exception('No ChatGPT results provided.');
             }
             // TODO we will probably need to remove those escape characters and new lines. 
             // We will only receive one complete response from ChatGPT.

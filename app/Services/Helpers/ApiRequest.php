@@ -25,7 +25,6 @@ class ApiRequest
         $this->authorizationToken = app(JwtService::class)->generate();
     }
 
-
     /**
      * Use guzzle to make our request.
      *
@@ -33,14 +32,14 @@ class ApiRequest
      * @param string $path The request path.
      * @param array $params The request query params
      *
-     * @return array|null
+     * @return array
      */
-    public function call(string $method, string $path, array $params = array()): ?array
+    public function call(string $method, string $path, array $params = array()): array
     {
         try {
             $url = $this->getRequestUrl($path);
 
-            $guzzleSettings = $this->getRequestSettings($params);
+            $guzzleSettings = $this->getRequestSettings($method, $params);
 
             $guzzleResponse = $this->client->request($method, $url, $guzzleSettings);
 
@@ -51,12 +50,21 @@ class ApiRequest
 
             return $response;
         } catch (GuzzleException $e) {
+            \Log::error($e);
         }
 
-        return collect(['status' => 'error']);
+        return ['status' => 'error'];
     }
 
-    protected function getRequestSettings(array $params = array()): array
+    /**
+     * Build our api request.
+     *
+     * @param string $method
+     * @param array $params
+     *
+     * @return array
+     */
+    protected function getRequestSettings(string $method, array $params = array()): array
     {
         $guzzleSettings = array(
             'connect_timeout' => 60,
@@ -68,7 +76,7 @@ class ApiRequest
         );
 
         // Add the query parameters
-        if (in_array($method, array('GET'))) {
+        if (strtoupper($method) === 'GET') {
             $guzzleSettings['query'] = $params;
         }
 
@@ -88,11 +96,18 @@ class ApiRequest
      */
     protected function getRequestUrl(string $path): string
     {
-        return config('api_url') . '/' . $path;
+        return config('app.api_url') . '/' . $path;
     }
 
-    public function requestTopTheaters(array $queryParams)
+    /**
+     * Request top theater data from our internal api.
+     *
+     * @param array $queryParams
+     *
+     * @return array
+     */
+    public function requestTopTheaters(array $queryParams): array
     {
-        return $this->call('GET', '/theaters/tp[', $queryParams);
+        return $this->call('GET', 'theaters/top', $queryParams);
     }
 }
