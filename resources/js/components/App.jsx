@@ -52,7 +52,6 @@ export const App = () => {
     }, []);
 
     const handleLimitChange = (value) => {
-        console.log(value);
         if (isNaN(parseInt(value))) {
             setInputError("Please use a numeric value as a limit.");
         } else {
@@ -146,7 +145,7 @@ export const App = () => {
                 {showData ?
                     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                         <div className="text-center mb-2">
-                            <span>Showing Top Performing Theaters from {Moment(startDate).utc().format('MMMM Do YYYY')} to {Moment(endDate).utc().format('MMMM Do YYYY')}</span>
+                            <span>Showing ({topTheaterData.length}) Top Performing Theaters from {Moment(startDate).utc().format('MMMM Do YYYY')} to {Moment(endDate).utc().format('MMMM Do YYYY')}</span>
                         </div>
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
