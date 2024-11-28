@@ -15,9 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        (new TheaterRepository)->createTheaters(15);
-        (new MovieRepository)->createMovies(45);
-        Screening::factory(300)->create();
-        Sale::factory(2500)->create();
+        (new TheaterRepository)->createTheaters(30);
+        (new MovieRepository)->createMovies(60);
+        Screening::factory(600)->create();
+        Sale::factory(4000)->create();
     }
 }
