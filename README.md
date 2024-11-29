@@ -14,13 +14,14 @@ These steps should be followed in your desired terminal.
 6. If you have provided an `OPEN_AI_API_SECRET` key to your `.env` you can run `php artisan db:seed` in your terminal. Do not worry if things take a moment to finish.
     - If you are not using OPEN AI, manually import the included csv files, comment out lines 18 and 19 in /database/seeders/DatabaseSeeder.php then run `php artisan db:seed` to run the remaining factory seeders.
     - Your database should now have several tables and a stored procedure.
-7. Navigate back to your `.env` and change the `DB_HOST` to the name of the mysql docker container. You need to do this to run the application.
+7. run `php artisan jwt:secret` to generate a secret key for our internal api. You will need this key later so keep it on hand.
+8. Navigate back to your `.env` and change the `DB_HOST` to the name of the mysql docker container. You need to do this to run the application.
     - For this example my container is named `ata-theaters_database_1`
     - To run migrations and seeders again the `DB_HOST` will need to be reset back to 127.0.0.1 and vice versa.
-8. At this point ensure the API docker image has been spun up as well.
+9. At this point ensure the API docker image has been spun up as well.
     - The steps for that [Can be found here](https://github.com/CameronPeace/ATA-Theaters-Api)
-9. run `npm install && npm run dev` and navigate to localhost in your browser of choice
-10. To get to the dashboard register an email and password to login. You can use the combination to back in later as long as your local database maintains its data.
+10. run `npm install && npm run dev` and navigate to localhost in your browser of choice
+11. To get to the dashboard register an email and password to login. You can use the combination to back in later as long as your local database maintains its data.
 
 
 ## ATA Theaters API
