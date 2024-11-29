@@ -15,7 +15,7 @@ class ApiRequest
     private $client;
 
     /**
-     * @var string The OpenAI API Token.
+     * @var string The Api Jwt Token
      */
     private $authorizationToken;
 
