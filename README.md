@@ -12,8 +12,9 @@ These steps should be followed in your desired terminal.
     - Docker will prepare the containers and the local mysql database.
 5. Now `php artisan migrate` to migrate our tables into our local database.
 6. If you have provided an `OPEN_AI_API_SECRET` key to your `.env` you can run `php artisan db:seed` in your terminal. Do not worry if things take a moment to finish.
-    - If you are not using OPEN AI, manually import the included csv files, comment out lines 18 and 19 in /database/seeders/DatabaseSeeder.php then run `php artisan db:seed` to run the remaining factory seeders.
-    - Your database should now have several tables and a stored procedure.
+    - If you are not using OPEN AI, manually import the included csv files OR run the sql inserts, comment out lines 18 and 19 in /database/seeders/DatabaseSeeder.php then run `php artisan db:seed` to run the remaining factory seeders.
+    - The required csv files to import can be found at `/database/seeders/manual/csv` and the direct inserts are located at `/database/seeders/manual/inserts`
+    - Your database should now have several populated tables and a stored procedure.
 7. run `php artisan jwt:secret` to generate a secret key for our internal api. You will need this key later so keep it on hand.
 8. Navigate back to your `.env` and change the `DB_HOST` to the name of the mysql docker container. You need to do this to run the application.
     - For this example my container is named `ata-theaters_database_1`
