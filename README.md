@@ -1,6 +1,9 @@
 ## ATA Theaters
 A Laravel application displaying the top performing theaters within a daterange.
-![Dashboard no Data]("/screenshots/Screenshot 2024-11-29 at 7.56.55 AM.png?raw=true" "Dashboard Start")
+![Screenshot 2024-11-29 at 7 56 55 AM](https://github.com/user-attachments/assets/02c3e6cc-6fcd-4d5e-b7e2-28659fd21c70)
+![Screenshot 2024-11-29 at 7 56 41 AM](https://github.com/user-attachments/assets/818ebd14-860d-4dfd-8157-80142ad70e6a)
+![Screenshot 2024-11-29 at 7 54 22 AM](https://github.com/user-attachments/assets/7f1a9e27-b734-4dc9-84ea-37f58fd93dd0)
+
 ## Spinning Up
 To setup locally please follow the steps below. You will need docker installed and running.
 These steps should be followed in your desired terminal.
