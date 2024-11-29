@@ -4,13 +4,11 @@ namespace App\Services\Helpers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Request;
-use Illuminate\Support\Collection;
 
 class OpenAiRequest
 {
 
-    /**
+	/**
 	 * Main OPEN AI API URL
 	 */
 	protected const OPENAI_API_URL = 'https://api.openai.com';
@@ -21,7 +19,7 @@ class OpenAiRequest
 	/* The default AI model to use */
 	protected const DEFAULT_AI_MODEL = 'gpt-4o-mini';
 
-    /**
+	/**
 	 * @var GuzzleHttp Client
 	 */
 	private $client;
@@ -29,22 +27,28 @@ class OpenAiRequest
 	/**
 	 * @var string The OpenAI API Token.
 	 */
-	private $authorizationToken; 
+	private $authorizationToken;
 
 	public function __construct()
 	{
-        $this->client = new Client();
-        $this->authorizationToken = env('OPEN_API_SECRET');
+		$this->client = new Client();
+		$this->authorizationToken = config('open_ai_secret');
 	}
 
-    
-
+	/**
+	 * Use guzzle to make our request.
+	 *
+	 * @param string $method The reqeust method.
+	 * @param string $path The request path.
+	 * @param array $params The request query params
+	 *
+	 * @return array|null
+	 */
 	public function call(string $method, string $path, array $params = array()): ?array
 	{
-
 		try {
 
-            $url = $this->getRequestUrl($path);
+			$url = $this->getRequestUrl($path);
 
 			$guzzleSettings = $this->getRequestSettings($params);
 
@@ -55,18 +59,22 @@ class OpenAiRequest
 				'status' => $guzzleResponse->getStatusCode()
 			);
 
-            return $response;
-            
+			return $response;
 		} catch (GuzzleException $e) {
-
 		}
 
 		return collect(['status' => 'error']);
 	}
 
-    protected function getRequestSettings(array $params = array()): array
+	/**
+	 * Prepare settings for request.
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	protected function getRequestSettings(array $params = array()): array
 	{
-
 		$guzzleSettings = array(
 			'connect_timeout' => 60,
 			'timeout' => 60,
@@ -83,7 +91,7 @@ class OpenAiRequest
 		return $guzzleSettings;
 	}
 
-    /**
+	/**
 	 * Builds the URL that requests should be sent to.
 	 *
 	 * @param string $path Path for the call.
@@ -95,7 +103,7 @@ class OpenAiRequest
 		return self::OPENAI_API_URL . '/' . $path;
 	}
 
-    /**
+	/**
 	 * Send a prompt to the OpenAI Chat API and get a response.
 	 *
 	 * @param string $prompt
@@ -112,5 +120,4 @@ class OpenAiRequest
 
 		return $this->call('POST', self::OPENAI_API_VERSION . '/chat/completions', $payload);
 	}
-
 }
